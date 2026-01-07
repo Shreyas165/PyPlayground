@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shoot Master</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #90C978;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid white;
+            background: #90C978;
+        }
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .info {
+            margin-bottom: 10px;
+            display: flex;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Shoot Master</h1>
+    <div class="info">
+        <div>Health: <span id="health">100</span></div>
+        <div>Ammo: <span id="ammo">20</span></div>
+        <div>Score: <span id="score">0</span></div>
+    </div>
+    <canvas id="gameCanvas" width="1200" height="600"></canvas>
+    <div class="controls">
+        <p>WASD or Arrow Keys: Move | Space: Shoot | Q: Grenade</p>
+        <button onclick="resetGame()">Reset Game</button>
+        <button onclick="window.location.href='/'">Back to Home</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let player = {
+            x: 100,
+            y: 300,
+            width: 40,
+            height: 40,
+            speed: 5,
+            health: 100,
+            maxHealth: 100,
+            ammo: 20,
+            grenades: 5,
+            direction: 1
+        };
+
+        let bullets = [];
+        let enemies = [];
+        let grenades = [];
+        let explosions = [];
+        let keys = {};
+        let score = 0;
+        let gameRunning = true;
+        let shootCooldown = 0;
+
+        // Simple platformer setup
+        const platforms = [
+            {x: 0, y: 550, width: 1200, height: 50},
+            {x: 200, y: 450, width: 200, height: 20},
+            {x: 500, y: 350, width: 200, height: 20},
+            {x: 800, y: 250, width: 200, height: 20}
+        ];
+
+        function drawPlayer() {
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+        }
+
+        function drawEnemies() {
+            ctx.fillStyle = 'red';
+            enemies.forEach(enemy => {
+                ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+            });
+        }
+
+        function drawBullets() {
+            ctx.fillStyle = 'yellow';
+            bullets.forEach(bullet => {
+                ctx.fillRect(bullet.x, bullet.y, 5, 5);
+            });
+        }
+
+        function drawPlatforms() {
+            ctx.fillStyle = '#8B4513';
+            platforms.forEach(platform => {
+                ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+            });
+        }
+
+        function movePlayer() {
+            if (keys['w'] || keys['W'] || keys['ArrowUp']) {
+                // Jump logic (simplified)
+                player.y -= 5;
+            }
+            if (keys['a'] || keys['A'] || keys['ArrowLeft']) {
+                player.x -= player.speed;
+                player.direction = -1;
+            }
+            if (keys['d'] || keys['D'] || keys['ArrowRight']) {
+                player.x += player.speed;
+                player.direction = 1;
+            }
+
+            // Keep player on screen
+            player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+            player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
+        }
+
+        function shoot() {
+            if (shootCooldown <= 0 && player.ammo > 0) {
+                bullets.push({
+                    x: player.x + player.width,
+                    y: player.y + player.height / 2,
+                    dx: 10 * player.direction,
+                    dy: 0
+                });
+                player.ammo--;
+                shootCooldown = 20;
+                document.getElementById('ammo').textContent = player.ammo;
+            }
+        }
+
+        function updateBullets() {
+            bullets.forEach((bullet, index) => {
+                bullet.x += bullet.dx;
+                if (bullet.x < 0 || bullet.x > canvas.width) {
+                    bullets.splice(index, 1);
+                } else {
+                    // Check enemy collision
+                    enemies.forEach((enemy, eIndex) => {
+                        if (bullet.x < enemy.x + enemy.width &&
+                            bullet.x + 5 > enemy.x &&
+                            bullet.y < enemy.y + enemy.height &&
+                            bullet.y + 5 > enemy.y) {
+                            bullets.splice(index, 1);
+                            enemies.splice(eIndex, 1);
+                            score += 10;
+                            document.getElementById('score').textContent = score;
+                        }
+                    });
+                }
+            });
+        }
+
+        function spawnEnemy() {
+            if (Math.random() < 0.01) {
+                enemies.push({
+                    x: canvas.width,
+                    y: Math.random() * (canvas.height - 50),
+                    width: 30,
+                    height: 30,
+                    speed: 2
+                });
+            }
+        }
+
+        function updateEnemies() {
+            enemies.forEach((enemy, index) => {
+                enemy.x -= enemy.speed;
+                if (enemy.x < 0) {
+                    enemies.splice(index, 1);
+                }
+                // Check collision with player
+                if (enemy.x < player.x + player.width &&
+                    enemy.x + enemy.width > player.x &&
+                    enemy.y < player.y + player.height &&
+                    enemy.y + enemy.height > player.y) {
+                    player.health -= 10;
+                    document.getElementById('health').textContent = player.health;
+                    enemies.splice(index, 1);
+                    if (player.health <= 0) {
+                        gameRunning = false;
+                        alert('Game Over! Final Score: ' + score);
+                        resetGame();
+                    }
+                }
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPlatforms();
+            drawPlayer();
+            drawEnemies();
+            drawBullets();
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+
+            if (shootCooldown > 0) shootCooldown--;
+
+            movePlayer();
+            if (keys[' ']) {
+                shoot();
+            }
+            updateBullets();
+            spawnEnemy();
+            updateEnemies();
+
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function resetGame() {
+            player = {
+                x: 100,
+                y: 300,
+                width: 40,
+                height: 40,
+                speed: 5,
+                health: 100,
+                maxHealth: 100,
+                ammo: 20,
+                grenades: 5,
+                direction: 1
+            };
+            bullets = [];
+            enemies = [];
+            grenades = [];
+            explosions = [];
+            score = 0;
+            gameRunning = true;
+            shootCooldown = 0;
+            document.getElementById('health').textContent = player.health;
+            document.getElementById('ammo').textContent = player.ammo;
+            document.getElementById('score').textContent = score;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+
+        gameLoop();
+    </script>
+</body>
+</html>
+

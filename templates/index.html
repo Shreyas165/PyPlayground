@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Games</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+<script src="{{url_for('static', filename='Project.js')}}"></script>
+
+<audio autoplay loop>
+  <source src="{{url_for('static', filename='bgmusic.mp3')}}" type="mp3">
+</audio>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var audio = new Audio('{{url_for("static", filename="bg1music.mp3")}}');
+    audio.loop = true;
+
+    document.body.addEventListener('click', function () {
+        audio.play();
+        document.getElementById('audioControlsButton').addEventListener('click', function () {
+        document.getElementById('audioControlsContainer').style.display = 'block';
+      });
+
+      document.getElementById('closeAudioControls').addEventListener('click', function () {
+        document.getElementById('audioControlsContainer').style.display = 'none';
+      });
+
+      document.getElementById('volumeControl').addEventListener('input', function () {
+        audio.volume = this.value / 100;
+        
+      });
+    });
+    });
+
+</script>
+</head>
+<body>
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+  <a href="{{url_for('static', filename='About.html')}}">About Us</a>
+  <a href="{{url_for('static', filename='ContactForm.html')}}">Contact Us</a>
+  <button id="audioControlsButton">⚙️</button>
+</div>
+<div class="stars">
+  <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+</div>
+<div id="main">
+  <button class="openbtn" onclick="openNav()">☰ </button>  
+  <center><h2 style="color:yellow;">Welcome To <br>Retro Revival Games</h2></center>
+</div> 
+<center><div id="audioControlsContainer" style="display: none;">
+  <div id="closeAudioControls" style="cursor: pointer; text-align: right; padding: 10px; color: yellow; margin-bottom: 10px">×</div>
+  <label for="volumeControl" style="color:yellow">Volume:</label>
+  <input type="range" id="volumeControl" min="0" max="100" step="1" value="50">
+</div></center>
+
+
+<div class="row">
+  <div class="column">
+    <div class="card">
+      <img src="{{url_for('static', filename='Snake.png')}}" alt="Snake Game" style="width:100%">
+      <div class="container">
+        <center><h2 style="color:yellow;">Snake Game</h2>
+        <button onclick="runScript()">Play game1</button>
+        <button onclick="runScript2()">Play game2</button></center>
+        <script>
+            function runScript() {
+                window.location.href = '/run-script';
+            }
+            function runScript2() {
+                window.location.href = '/run-script2';
+            }
+        </script>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="column">
+      <div class="card">
+        <img src="{{url_for('static', filename='Tic.jpg')}}" alt="Tic Tac Toe" style="width:100%">
+        <div class="container">
+          <center><h2 style="color:yellow;">Tic Tac Toe</h2>
+          <button onclick="runScript3()">Play game</button></center>
+          <script>
+              function runScript3() {
+                  window.location.href = '/run-script3';
+              }
+          </script>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="column">
+        <div class="card">
+          <img src="{{url_for('static', filename='bout.jpg')}}" alt="Classic breakout" style="width:100%; height:256px">
+          <div class="container">
+            <center><h2 style="color:yellow;">Classic Breakout</h2>
+            <button onclick="runScript7()">Play Level1</button>
+            <button onclick="runScript77()">Play Level2</button></center>
+            <script>
+                function runScript7() {
+                    window.location.href = '/run-script7';
+                }
+                function runScript77() {
+                    window.location.href = '/run-script77';
+                }
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+      
+    <div class="row">
+      <div class="column">
+        <div class="card">
+          <img src="{{url_for('static', filename='block.jpg')}}" alt="Dodge master" style="width:100%; height:100%">
+          <div class="container">
+            <center><h2 style="color:yellow;">Dodge Master</h2>
+            <button onclick="runScript8()">Play game</button></center>
+            <script>
+                function runScript8() {
+                    window.location.href = '/run-script8';
+                }
+            </script> 
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="column">
+          <div class="card">
+            <img src="{{url_for('static', filename='Shoot.jpg')}}" alt="Shoot Master" style="width:450px; height:250px">
+            <div class="container">
+              <center><h2 style="color:yellow;">Shoot Master</h2>
+              <button onclick="runScript9()">Play game</button></center>
+              <script>
+                  function runScript9() {
+                      window.location.href = '/run-script9';
+                  }
+              </script> 
+            </div>
+          </div>
+        </div>
+        
+
+
+        <div="row">
+          <div class="column">
+            <div class="card">
+              <img src="{{url_for('static', filename='Tet.png')}}" alt="Tetris" style="width:450px; height:250px">
+              <div class="container">
+                <center><h2 style="color:yellow;">Tetris</h2>
+                <button onclick="runScript10()">Play game</button></center>
+                <script>
+                    function runScript10() {
+                        window.location.href = '/run-script10';
+                    }
+                </script> 
+              </div>
+            </div>
+          </div>
+        </div>
+          
+</body>
+</html> 

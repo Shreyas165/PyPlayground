@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Form</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-image: url('bg4.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .contact-form {
+        max-width: 400px;
+        border-radius: 8px;
+        overflow: hidden;
+        animation: fadeIn 1s ease-in-out;
+        position: relative;
+        padding: 60px;
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(15px);
+        border: 1px solid #fff;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        border-right: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        width: 500px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+      }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-group button {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    .form-group button:hover {
+      background-color: #45a049;
+    }
+    h2{
+        color:white;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="contact-form">
+    <h2>Contact Us</h2>
+    <form id="dataForm" action="/submit" method="POST">
+      <div class="form-group">
+        <label for="name;" style="color:white">Name:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="email;" style="color:white">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        
+    <label for="country;" style="color:white">Country</label>
+    <select id="country" name="country">
+      <option value="Australia">Australia</option>
+      <option value="Bangladesh">Bangladesh</option>
+      <option value="canada">Canada</option>
+      <option value="Denmark">Denmark</option>
+      <option value="Egypt">Egypt</option>
+      <option value="Finland">Finland</option>
+      <option value="Germany">Germany</option>
+      <option value="Hungary">Hungary</option>
+      <option value="India">India</option>
+      <option value="Japan">Japan</option>
+      <option value="Kenya">Kenya</option>
+      <option value="Libya">Libya</option>
+      <option value="Maldives">Maldives</option>
+      <option value="Nepal">Nepal</option>
+      <option value="Oman">Oman</option>
+      <option value="Poland">Poland</option>
+      <option value="Qatar">Qatar</option>
+      <option value="Russia">Russia</option>
+      <option value="Spain">Spain</option>
+      <option value="Thailand">Thailand</option>
+      <option value="Usa">USA</option>
+      <option value="Vietnam">Vietnam</option>
+      <option value="Yemen">Yemen</option>
+      <option value="Zambia">Zambia</option>
+    </select>
+      </div>
+      <div class="form-group">
+        <label for="message;" style="color:white">Message:</label>
+        <textarea id="message" name="message" required></textarea>
+      </div>
+      <div class="form-group">
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+
+</body>
+</html>

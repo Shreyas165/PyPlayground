@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dodge Master</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: black;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid white;
+            background: black;
+        }
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .info {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dodge Master</h1>
+    <div class="info">
+        <div>Score: <span id="score">0</span></div>
+        <div>Use Left/Right Arrow Keys or A/D to dodge obstacles</div>
+    </div>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div class="controls">
+        <button onclick="resetGame()">Reset Game</button>
+        <button onclick="window.location.href='/'">Back to Home</button>
+    </div>
+    <div id="gameOver" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); padding: 20px; border: 2px solid white;">
+        <h2>Game Over!</h2>
+        <p>Final Score: <span id="finalScore">0</span></p>
+        <button onclick="resetGame()">Play Again</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const PLAYER_WIDTH = 50;
+        const PLAYER_HEIGHT = 50;
+        const OBSTACLE_WIDTH = 50;
+        const OBSTACLE_HEIGHT = 50;
+
+        let player = {
+            x: canvas.width / 2 - PLAYER_WIDTH / 2,
+            y: canvas.height - PLAYER_HEIGHT - 20,
+            speed: 5
+        };
+
+        let obstacles = [];
+        let obstacleSpeed = 3;
+        let score = 0;
+        let gameRunning = true;
+        let keys = {};
+        let frameCount = 0;
+
+        function drawPlayer() {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(player.x, player.y, PLAYER_WIDTH, PLAYER_HEIGHT);
+        }
+
+        function drawObstacles() {
+            ctx.fillStyle = 'red';
+            obstacles.forEach(obstacle => {
+                ctx.fillRect(obstacle.x, obstacle.y, OBSTACLE_WIDTH, OBSTACLE_HEIGHT);
+            });
+        }
+
+        function movePlayer() {
+            if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
+                if (player.x > 0) {
+                    player.x -= player.speed;
+                }
+            }
+            if (keys['ArrowRight'] || keys['d'] || keys['D']) {
+                if (player.x < canvas.width - PLAYER_WIDTH) {
+                    player.x += player.speed;
+                }
+            }
+        }
+
+        function generateObstacle() {
+            if (Math.random() < 0.05) {
+                obstacles.push({
+                    x: Math.random() * (canvas.width - OBSTACLE_WIDTH),
+                    y: -OBSTACLE_HEIGHT,
+                    width: OBSTACLE_WIDTH,
+                    height: OBSTACLE_HEIGHT
+                });
+            }
+        }
+
+        function moveObstacles() {
+            obstacles.forEach((obstacle, index) => {
+                obstacle.y += obstacleSpeed;
+                if (obstacle.y > canvas.height) {
+                    obstacles.splice(index, 1);
+                    score++;
+                    document.getElementById('score').textContent = score;
+                }
+            });
+        }
+
+        function checkCollision() {
+            const playerRect = {
+                x: player.x,
+                y: player.y,
+                width: PLAYER_WIDTH,
+                height: PLAYER_HEIGHT
+            };
+
+            for (let obstacle of obstacles) {
+                if (playerRect.x < obstacle.x + obstacle.width &&
+                    playerRect.x + playerRect.width > obstacle.x &&
+                    playerRect.y < obstacle.y + obstacle.height &&
+                    playerRect.y + playerRect.height > obstacle.y) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPlayer();
+            drawObstacles();
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+
+            frameCount++;
+            movePlayer();
+            generateObstacle();
+            moveObstacles();
+
+            if (checkCollision()) {
+                gameRunning = false;
+                document.getElementById('finalScore').textContent = score;
+                document.getElementById('gameOver').style.display = 'block';
+                return;
+            }
+
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function resetGame() {
+            player = {
+                x: canvas.width / 2 - PLAYER_WIDTH / 2,
+                y: canvas.height - PLAYER_HEIGHT - 20,
+                speed: 5
+            };
+            obstacles = [];
+            score = 0;
+            gameRunning = true;
+            frameCount = 0;
+            obstacleSpeed = 3;
+            document.getElementById('score').textContent = score;
+            document.getElementById('gameOver').style.display = 'none';
+            gameLoop();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+
+        gameLoop();
+    </script>
+</body>
+</html>
+

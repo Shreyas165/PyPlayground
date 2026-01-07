@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background-color: #f2f2f2;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.column {
+  float: left;
+  width: 33.3%;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px;
+  background-color: #fff;
+}
+
+.about-section {
+  padding: 50px;
+  text-align: center;
+  background-color: #333;
+  color: white;
+}
+
+.container {
+  padding: 0 16px;
+}
+
+.container::after, .row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.title {
+  color: #777;
+}
+
+.button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #333;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button:hover {
+  background-color: #555;
+}
+
+@media screen and (max-width: 650px) {
+  .column {
+    width: 100%;
+    display: block;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="about-section">
+  <h1>About Us</h1>
+  <p>Our Story<br>
+    Established in [2023], [Retro Revival Games] began as a humble project fueled by our love for gaming.</p>
+  <p>What We Offer<br>
+    Diverse Gaming Content: From action-packed shooters to mind-bending games, we offer a wide range of games to suit every player's taste.<br>
+    Latest Updates: Stay in the loop with our regular updates on new releases, gaming news, and industry insights.</p>
+</div>
+
+<h2 style="text-align:center">Our Team</h2>
+<p><center>Behind [Retro Revival Games] is a dedicated team of gamers, developers, and enthusiasts who work tirelessly to ensure that your gaming journey is nothing short of exceptional. Meet the minds behind the magic.</center></p>
+<div class="row">
+  <div class="column">
+    <div class="card">
+      <div class="container">
+        <h2>Shreyas Kl</h2>
+        <p class="title">Founder & Co-designer</p>
+        <p>The visionary leader who sparked the idea and continues to drive our mission forward.</p>
+        <p>klshreyas55@gmail.com</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="card">
+      <div class="container">
+        <h2>Prerana J</h2>
+        <p class="title">Art Director & Content Creator</p>
+        <p>Our talented Art Director and content creator who bring you entertaining and informative gaming content.</p>
+        <p>preranaj@gmail.com</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="column">
+    <div class="card">
+      <div class="container">
+        <h2>Shreyas S</h2>
+        <p class="title">Designer</p>
+        <p>The wizards behind the scenes who craft and optimize the platform for the best user experience.</p>
+        <p>shreyass@gmail.com</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center; background-color: #333; color: #fff; padding: 20px;">
+  <p>Get in Touch<br>
+    Whether you have a question, feedback, or just want to say hello, we'd love to hear from you! Feel free to reach out to us through our contact page.</p>
+  <p>Thank you for being part of the [Retro Revival Games] community. Let's level up together!</p>
+</div>
+
+</body>
+</html>
